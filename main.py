@@ -17,7 +17,6 @@ french_word_list = french_word_csv.values.tolist()
 # Random NUM
 RANDOM_NUM = random.randrange(len(french_word_list))
 
-
 # Wrong, Save data to words_to_learn.csv
 def wrong():
     global FLIP
@@ -35,6 +34,7 @@ def wrong():
 # Flip card
 def card_flip(event=None):
     global FLIP
+
     if FLIP != 0:
         bottom_label.config(fg="#FFFFFF", bg="#91c2af")
         top_label.config(fg="#FFFFFF", bg="#91c2af", text="English")
@@ -54,9 +54,11 @@ def card_flip(event=None):
 # New word
 def new_word():
     global RANDOM_NUM
-    global FLIP
+    global FLIP, flip_timer
 
     FLIP = 0
+
+    window.after_cancel(flip_timer)
 
     bottom_label.config(fg="#000000", bg="#FFFFFF")
     top_label.config(fg="#000000", bg="#FFFFFF", text="French")
@@ -65,6 +67,8 @@ def new_word():
     RANDOM_NUM = random.randrange(len(french_word_list))
 
     bottom_label.config(text=f"{french_word_list[RANDOM_NUM][0]}")
+
+    flip_timer = window.after(6000, func=card_flip)
 
     card_flip()
 
@@ -78,6 +82,7 @@ window.config(padx=40, bg=BACKGROUND_COLOR)
 window.resizable(False, False)
 window.bind("<space>", card_flip)
 
+flip_timer = window.after(3000, func=card_flip)
 
 # Card-Front IMG
 canvas = Canvas(width=800, height=580, bg=BACKGROUND_COLOR, highlightthickness=0)
